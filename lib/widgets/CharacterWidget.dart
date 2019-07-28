@@ -14,7 +14,7 @@ class CharacterWidget extends StatelessWidget {
     return InkWell(
       onTap: () {
         Navigator.push(context, PageRouteBuilder(
-          transitionDuration: const Duration(microseconds: 350),
+          transitionDuration: const Duration(milliseconds: 350),
           pageBuilder: (context, _, __) => CharacterDetailScreen(character: characters[0])
         ));
       },
