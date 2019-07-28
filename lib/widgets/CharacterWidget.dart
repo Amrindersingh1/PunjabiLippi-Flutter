@@ -5,6 +5,14 @@ import 'package:punjabilipi/pages/CharacterDetailScreen.dart';
 
 class CharacterWidget extends StatelessWidget {
 
+  final Character character;
+  final PageController pageController;
+  final int currentPage;
+
+  const CharacterWidget({Key key, this.character, this.pageController, this.currentPage}) : super(key: key);
+
+
+
   @override
   Widget build(BuildContext context) {
     final ScreenHeight = MediaQuery.of(context).size.height;
@@ -15,52 +23,62 @@ class CharacterWidget extends StatelessWidget {
       onTap: () {
         Navigator.push(context, PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 350),
-          pageBuilder: (context, _, __) => CharacterDetailScreen(character: characters[0])
+          pageBuilder: (context, _, __) => CharacterDetailScreen(character: character)
         ));
       },
-      child: Stack(
-        children: <Widget>[
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: ClipPath(
-              clipper: CharacterCardClipper(),
-              child: Hero(
-                tag: 'backgroundCard',
-                child: Container(
-                  height: 0.55 * ScreenHeight,
-                  width: 0.9 * ScreenWidth,
-                  decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                    colors: characters[0].colors,
-                    begin: Alignment.topRight,
-                    end: Alignment.bottomLeft,
-                  )),
+      child: AnimatedBuilder(
+        animation: pageController,
+        builder: (context, child) {
+          double value = 1;
+          if (pageController.position.haveDimensions) {
+            value = pageController.page - currentPage;
+            value = (1 - (value.abs() * 0.6)).clamp(0.0, 1.0);
+          }
+          return Stack(
+            children: <Widget>[
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: ClipPath(
+                  clipper: CharacterCardClipper(),
+                  child: Hero(
+                    tag: 'backgroundCard',
+                    child: Container(
+                      height: 0.55 * ScreenHeight,
+                      width: 0.9 * ScreenWidth,
+                      decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: character.colors,
+                            begin: Alignment.topRight,
+                            end: Alignment.bottomLeft,
+                          )),
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ),
-          Align(
-            alignment: Alignment(0,-0.9),
-            child: Hero(
-              tag: "image-${characters[0].name}",
-              child: Image.asset(
-                characters[0].imagePath,
-                height: ScreenHeight * 0.55,
+              Align(
+                alignment: Alignment(0,-0.9),
+                child: Hero(
+                  tag: "image-${character.name}",
+                  child: Image.asset(
+                    character.imagePath,
+                    height: ScreenHeight * 0.55 * value,
+                  ),
+                ),
               ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(left: 40, right: 32, bottom: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: <Widget>[
-                Text(characters[0].name, style: AppTheme.heading,),
-                Text("Tap to read more", style: AppTheme.subHeading,)
-              ],
-            ),
-          )
-        ],
+              Padding(
+                padding: const EdgeInsets.only(left: 40, right: 32, bottom: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: <Widget>[
+                    Text(character.name, style: AppTheme.heading,),
+                    Text("Tap to read more", style: AppTheme.subHeading,)
+                  ],
+                ),
+              )
+            ],
+          );
+        },
       ),
     );
   }
