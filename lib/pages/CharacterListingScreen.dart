@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:punjabilipi/StyleConstants.dart';
+import 'package:punjabilipi/widgets/CharacterWidget.dart';
 
 class CharacterListingScreen extends StatefulWidget {
   @override
@@ -20,24 +21,30 @@ class _CharacterListingScreenState extends State<CharacterListingScreen> {
           )
         ],
       ),
-      body: Column(
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.only(left: 32.0, top: 8.0),
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(text: "Punjabi Lippi", style: AppTheme.display1),
-                  TextSpan(text: "\n"),
-                  TextSpan(text: "Gurmukhi", style: AppTheme.display2)
-                ]
+      body: Padding(
+        padding: const EdgeInsets.only(bottom: 40.0),
+        child: SafeArea(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 32.0, top: 8.0),
+                child: RichText(
+                  text: TextSpan(
+                    children: [
+                      TextSpan(text: "Punjabi Lippi", style: AppTheme.display1),
+                      TextSpan(text: "\n"),
+                      TextSpan(text: "Gurmukhi", style: AppTheme.display2)
+                    ]
+                  )
+                ),
+              ),
+              Expanded(
+                child: CharacterWidget(),
               )
-            ),
+            ],
           ),
-          Expanded(
-            child: CharacterWidget(),
-          )
-        ],
+        ),
       ),
     );
   }
