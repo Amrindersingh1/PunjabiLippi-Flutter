@@ -56,12 +56,18 @@ class CharacterWidget extends StatelessWidget {
                 ),
               ),
               Align(
-                alignment: Alignment(0,-0.9),
+                alignment: Alignment(0,-0.5),
                 child: Hero(
-                  tag: "image-${character.name}",
-                  child: Image.asset(
-                    character.imagePath,
-                    height: ScreenHeight * 0.55 * value,
+                  tag: "text-${character.word}",
+                  child: Material(
+                    type: MaterialType.transparency,
+                    child: Text(
+                      character.word,
+                      style: AppTheme.punjabiCharacter.copyWith(
+                        fontSize: 400 * value,
+                        color: character.textColor
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -71,7 +77,7 @@ class CharacterWidget extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    Text(character.name, style: AppTheme.heading,),
+                    Hero(tag: "text-${character.name}",child: Material(type: MaterialType.transparency, child: Text(character.name, style: AppTheme.heading,))),
                     Text("Tap to read more", style: AppTheme.subHeading,)
                   ],
                 ),
