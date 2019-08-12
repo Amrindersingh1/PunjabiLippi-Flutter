@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:punjabilipi/models/characters.dart';
 import 'package:punjabilipi/StyleConstants.dart';
 import 'package:punjabilipi/pages/CharacterDetailScreen.dart';
+import 'package:punjabilipi/Gradients.dart';
+import 'package:audioplayers/audio_cache.dart';
+
 
 class CharacterWidget extends StatelessWidget {
 
@@ -11,19 +14,25 @@ class CharacterWidget extends StatelessWidget {
 
   const CharacterWidget({Key key, this.character, this.pageController, this.currentPage}) : super(key: key);
 
-
+  void playSound(var soundName) async {
+    if(soundName==null) {
+      soundName='oorhaa.mp3';
+    }
+    final AudioCache audioPlayer = AudioCache();
+    audioPlayer.play('audios/$soundName');
+  }
 
   @override
   Widget build(BuildContext context) {
     final ScreenHeight = MediaQuery.of(context).size.height;
     final ScreenWidth = MediaQuery.of(context).size.width;
-
+    final cardColor = Gradients.getGradient();
 
     return InkWell(
       onTap: () {
         Navigator.push(context, PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 350),
-          pageBuilder: (context, _, __) => CharacterDetailScreen(character: character)
+          pageBuilder: (context, _, __) => CharacterDetailScreen(character: character, colors: cardColor,)
         ));
       },
       child: AnimatedBuilder(
@@ -47,7 +56,7 @@ class CharacterWidget extends StatelessWidget {
                       width: 0.9 * ScreenWidth,
                       decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: character.colors,
+                            colors: cardColor,
                             begin: Alignment.topRight,
                             end: Alignment.bottomLeft,
                           )),
@@ -58,14 +67,14 @@ class CharacterWidget extends StatelessWidget {
               Align(
                 alignment: Alignment(0,-0.5),
                 child: Hero(
-                  tag: "text-${character.word}",
+                  tag: "word-${character.word}",
                   child: Material(
                     type: MaterialType.transparency,
                     child: Text(
                       character.word,
                       style: AppTheme.punjabiCharacter.copyWith(
                         fontSize: 400 * value,
-                        color: character.textColor
+                        color: Colors.white
                       ),
                     ),
                   ),
@@ -74,9 +83,27 @@ class CharacterWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 40, right: 32, bottom: 16),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
+                    Padding(
+                      padding: EdgeInsets.fromLTRB(0, 0, 0, 30),
+                      child: Hero(
+                        tag: "audio-${character.word}",
+                        child: Material(
+                          type: MaterialType.transparency,
+                          child: IconButton(
+                            icon: Icon(Icons.play_circle_outline),
+                            tooltip: 'play',
+                            color: Colors.white,
+                            iconSize: 70,
+                            onPressed: () {
+                              playSound(character.audio);
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
                     Hero(tag: "text-${character.name}",child: Material(type: MaterialType.transparency, child: Text(character.name, style: AppTheme.heading,))),
                     Text("Tap to read more", style: AppTheme.subHeading,)
                   ],
