@@ -221,7 +221,7 @@ List characters =   [
 
       description: "d' as in daddy",
 
-      audio: "daddaa1.mp3"
+      audio: "daddaa.mp3"
 
   ),
 
@@ -233,7 +233,7 @@ List characters =   [
 
       description: "dd' as in daddy",
 
-      audio: "dhaddaa1.mp3"
+      audio: "dhaddaa.mp3"
 
   ),
 
